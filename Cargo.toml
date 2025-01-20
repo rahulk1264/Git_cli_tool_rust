@@ -1,0 +1,10 @@
+[package]
+name = "Git_cli_tool_rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+git2 = "0.20.0"
+chrono = "0.4.39"
+crossterm = "0.28.1"
+thiserror = "2.0.11"
