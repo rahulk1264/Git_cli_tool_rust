@@ -2,27 +2,48 @@
 
 // use std::fmt;
 use std::io::{self, Write, Read};
+use chrono::Duration;
 use git2::Repository;
 use git2::BranchType;
+use chrono::prelude::*;
 
 fn main() -> Result<(), Error> {
-    let mut stdout = io::stdout();
+    
     let repo = Repository::open_from_env()?;
+
+    
+
+    Ok(())
+}
+
+type Result<T, E = Error> = std::result::Result<T, E>;
+
+fn get_branches(repo: &Repository) -> Result<Vec<Branch>, Error> {
+    // let mut stdout = io::stdout();
 
     for branch in repo.branches(Some(BranchType::Local))? {
         let (branch, branch_type) = branch?;
         let name = branch.name_bytes()?;
-        stdout.write_all(name)?;
-        write!(stdout, "\n")?;
+        // stdout.write_all(name)?;
+        // write!(stdout, "\n")?;
 
         let commit = branch.get().peel_to_commit()?;
         let hash = commit.id();
         println!("The hash is => {}", hash);
 
-        write!(stdout, "\n")?;
+        let time = commit.time();
+        let offset = Duration::minutes(i64::from(time.offset_minutes()));
+        let time = NaiveDateTime::from_timestamp(time.seconds(), 0) + offset;
+        println!("{}", time);
+        // println!("{}", time.offset_minutes());
+        // write!(stdout, "\n")?;
     }
+    todo!()
+}
 
-    Ok(())
+#[derive(Debug)]
+struct Branch {
+
 }
 
 
